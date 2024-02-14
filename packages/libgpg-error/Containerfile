@@ -1,7 +1,7 @@
 FROM scratch as base
-ENV SRC_VERSION=1.47
+ENV VERSION=1.47
 ENV SRC_HASH=9e3c670966b96ecc746c28c2c419541e3bcb787d1a73930f5e5f5e1bcbbb9bdb
-ENV SRC_FILE=libgpg-error-${SRC_VERSION}.tar.bz2
+ENV SRC_FILE=libgpg-error-${VERSION}.tar.bz2
 ENV SRC_SITE=https://gnupg.org/ftp/gcrypt/libgpg-error/${SRC_FILE}
 
 FROM base as fetch
@@ -15,7 +15,7 @@ COPY --from=binutils . /
 COPY --from=make . /
 COPY --from=npth . /
 RUN tar -xvf $SRC_FILE
-WORKDIR libgpg-error-${SRC_VERSION}
+WORKDIR libgpg-error-${VERSION}
 RUN --network=none <<-EOF
 	set -eux
 	./configure \

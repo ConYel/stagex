@@ -1,7 +1,7 @@
 FROM scratch as base
-ENV SRC_VERSION=1.10.3
+ENV VERSION=1.10.3
 ENV SRC_HASH=8b0870897ac5ac67ded568dcfadf45969cfa8a6beb0fd60af2a9eadc2a3272aa
-ENV SRC_FILE=libgcrypt-${SRC_VERSION}.tar.bz2
+ENV SRC_FILE=libgcrypt-${VERSION}.tar.bz2
 ENV SRC_SITE=https://gnupg.org/ftp/gcrypt/libgcrypt/${SRC_FILE}
 
 FROM base as fetch
@@ -15,7 +15,7 @@ COPY --from=binutils . /
 COPY --from=make . /
 COPY --from=libgpg-error . /
 RUN tar -xvf $SRC_FILE
-WORKDIR libgcrypt-${SRC_VERSION}
+WORKDIR libgcrypt-${VERSION}
 RUN --network=none <<-EOF
 	set -eux
 	./configure \

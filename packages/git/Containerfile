@@ -1,7 +1,7 @@
 FROM scratch as base
-ENV SRC_VERSION=2.9.5
+ENV VERSION=2.9.5
 ENV SRC_HASH=a4bea37ecb9a3fb5c0c8ef18c2f7eeaf8ccbcfec91f72f3bccfc6bf72a3e3902
-ENV SRC_FILE=git-${SRC_VERSION}.tar.xz
+ENV SRC_FILE=git-${VERSION}.tar.xz
 ENV SRC_SITE=http://mirrors.edge.kernel.org/pub/software/scm/git/${SRC_FILE}
 
 FROM base as fetch
@@ -17,7 +17,7 @@ COPY --from=zlib . /
 COPY --from=perl . /
 COPY --from=gettext . / 
 RUN tar -xvf $SRC_FILE
-WORKDIR git-${SRC_VERSION}
+WORKDIR git-${VERSION}
 RUN --network=none <<-EOF
 	set -eux
 	./configure \
@@ -45,7 +45,7 @@ COPY --from=musl . /
 COPY --from=busybox . /
 RUN /bin/sh <<-EOF
 	set -eux
-	EXPECTED_GIT_VERSION="git version ${SRC_VERSION}"
+	EXPECTED_GIT_VERSION="git version ${VERSION}"
 	GIT_VERSION=\$(git --version)
 	if [ "\$GIT_VERSION" != "\$EXPECTED_GIT_VERSION" ]; then
 	    echo "Expected git version is \$EXPECTED_GIT_VERSION, but got \$GIT_VERSION"

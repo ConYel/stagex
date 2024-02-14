@@ -1,7 +1,7 @@
 FROM scratch as base
-ENV SRC_VERSION=1.6
+ENV VERSION=1.6
 ENV SRC_HASH=1393abd9adcf0762d34798dc34fdcf4d0d22a8410721e76f1e3afcd1daa4e2d1
-ENV SRC_FILE=npth-${SRC_VERSION}.tar.bz2
+ENV SRC_FILE=npth-${VERSION}.tar.bz2
 ENV SRC_SITE=https://gnupg.org/ftp/gcrypt/npth/${SRC_FILE}
 
 FROM base as fetch
@@ -14,7 +14,7 @@ COPY --from=gcc . /
 COPY --from=binutils . /
 COPY --from=make . /
 RUN tar -xvf $SRC_FILE
-WORKDIR npth-${SRC_VERSION}
+WORKDIR npth-${VERSION}
 RUN --network=none <<-EOF
 	set -eux
 	./configure \
@@ -37,7 +37,7 @@ COPY --from=musl . /
 COPY --from=busybox . /
 RUN /bin/sh <<-EOF
 	set -eux
-	EXPECTED_NPTH_VERSION="${SRC_VERSION}"
+	EXPECTED_NPTH_VERSION="${VERSION}"
 	NPTH_VERSION=\$(npth-config --version)
 	if [ "\$NPTH_VERSION" != "\$EXPECTED_NPTH_VERSION" ]; then
 	    echo "Expected npth version is \$EXPECTED_NPTH_VERSION, but got \$NPTH_VERSION"

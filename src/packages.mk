@@ -1246,6 +1246,14 @@ out/musl-obstack/index.json: \
 	out/pkgconf/index.json
 	$(call build,musl-obstack)
 
+.PHONY: musl-scudo
+musl-scudo: out/musl-scudo/index.json
+out/musl-scudo/index.json: \
+	packages/musl-scudo/Containerfile \
+	out/filesystem/index.json \
+	out/stage3/index.json
+	$(call build,musl-scudo)
+
 .PHONY: ncurses
 ncurses: out/ncurses/index.json
 out/ncurses/index.json: \
@@ -1994,11 +2002,13 @@ out/rust/index.json: \
 scudo: out/scudo/index.json
 out/scudo/index.json: \
 	packages/scudo/Containerfile \
+	out/bash/index.json \
 	out/binutils/index.json \
 	out/busybox/index.json \
 	out/ca-certificates/index.json \
 	out/filesystem/index.json \
 	out/gcc/index.json \
+	out/linux-headers/index.json \
 	out/make/index.json \
 	out/musl/index.json \
 	out/openssl/index.json

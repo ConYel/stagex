@@ -1,0 +1,41 @@
+FROM scratch as base
+ENV VERSION=5.3.0
+ENV SRC_HASH=ef6f74fd45e95ee4ef7f9e19ebe5b075ca6b7fbe0140612b2a161abafb7ee179
+ENV SRC_FILE=${VERSION}.tar.gz
+ENV SRC_SITE=https://github.com/jemalloc/jemalloc/archive/refs/tags/${SRC_FILE}
+
+FROM base as fetch
+ADD --checksum=sha256:${SRC_HASH} ${SRC_SITE} .
+
+FROM fetch as build
+COPY --from=stagex/busybox . /
+COPY --from=stagex/binutils . /
+COPY --from=stagex/make . /
+COPY --from=stagex/perl . /
+COPY --from=stagex/autoconf . /
+COPY --from=stagex/musl . /
+COPY --from=stagex/gcc . /
+COPY --from=stagex/openssl . /
+COPY --from=stagex/ca-certificates . /
+COPY --from=stagex/m4 . /
+RUN tar -xf ${VERSION}.tar.gz
+WORKDIR jemalloc-${VERSION}
+RUN --network=none <<-EOF
+    set -eux
+    ./autogen.sh
+    export _pgs=12
+    ./configure \
+		--enable-xmalloc \
+		--prefix=/usr \
+		--localstatedir=/var \
+		--sysconfdir=/etc \
+		--with-lg-page="$_pgs" \
+		--with-lg-hugepage=21
+	make all dist -j "$(nproc)"
+EOF
+
+FROM build as install
+RUN --network=none make install DESTDIR=/rootfs
+
+FROM stagex/filesystem as package
+COPY --from=install /rootfs/. /

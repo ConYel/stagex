@@ -1,0 +1,40 @@
+
+FROM scratch as base
+ENV VERSION=18.1.8
+ENV SRC_HASH=e054e99a9c9240720616e927cb52363abbc8b4f1ef0286bad3df79ec8fdf892f
+ENV SRC_FILE=${VERSION}.tar.gz
+ENV SRC_SITE=https://github.com/llvm/llvm-project/releases/download/llvmorg-${VERSION}/compiler-rt-${VERSION}.src.tar.xz
+
+FROM base as fetch
+ADD --checksum=sha256:${SRC_HASH} ${SRC_SITE} .
+
+FROM fetch as build
+COPY --from=stagex/busybox . /
+COPY --from=stagex/bash . /
+COPY --from=stagex/binutils . /
+COPY --from=stagex/make . /
+COPY --from=stagex/musl . /
+COPY --from=stagex/gcc . /
+COPY --from=stagex/openssl . /
+COPY --from=stagex/ca-certificates . /
+COPY --from=stagex/linux-headers . /
+RUN tar -xf compiler-rt-${VERSION}.src.tar.xz
+WORKDIR compiler-rt-${VERSION}.src/lib/scudo/standalone
+COPY *.patch .
+RUN --network=none <<-EOF
+    set -eux
+    patch -p1 < add-makefile.patch
+    export CXXFLAGS="-DSCUDO_DISABLE_TBI"
+	make CXXFLAGS="$CXXFLAGS" TESTS="$(want_check && echo yes || echo no)"
+EOF
+
+FROM build as install
+RUN <<-EOF
+	set -eux
+    install -Dm755 libscudo.so -t /rootfs/usr/lib/
+	install -Dm644 libscudo.a -t /rootfs/usr/lib/
+	install -Dm644 include/scudo/interface.h -t /rootfs/usr/include/scudo/
+EOF
+
+FROM stagex/filesystem as package
+COPY --from=install /rootfs/. /

@@ -201,8 +201,14 @@ out/bzip2/index.json: \
 ca-certificates: out/ca-certificates/index.json
 out/ca-certificates/index.json: \
 	packages/ca-certificates/Containerfile \
+	out/binutils/index.json \
 	out/busybox/index.json \
-	out/filesystem/index.json
+	out/filesystem/index.json \
+	out/gcc/index.json \
+	out/make/index.json \
+	out/musl/index.json \
+	out/openssl/index.json \
+	out/perl/index.json
 	$(call build,ca-certificates)
 
 .PHONY: clang
@@ -270,6 +276,7 @@ out/curl/index.json: \
 	packages/curl/Containerfile \
 	out/binutils/index.json \
 	out/busybox/index.json \
+	out/ca-certificates/index.json \
 	out/filesystem/index.json \
 	out/gcc/index.json \
 	out/make/index.json \
@@ -1982,6 +1989,20 @@ out/rust/index.json: \
 	out/python/index.json \
 	out/zlib/index.json
 	$(call build,rust)
+
+.PHONY: scudo
+scudo: out/scudo/index.json
+out/scudo/index.json: \
+	packages/scudo/Containerfile \
+	out/binutils/index.json \
+	out/busybox/index.json \
+	out/ca-certificates/index.json \
+	out/filesystem/index.json \
+	out/gcc/index.json \
+	out/make/index.json \
+	out/musl/index.json \
+	out/openssl/index.json
+	$(call build,scudo)
 
 .PHONY: sed
 sed: out/sed/index.json

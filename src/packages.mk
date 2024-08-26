@@ -2072,6 +2072,7 @@ nodejs: out/nodejs/index.json
 out/nodejs/index.json: \
 	packages/nodejs/Containerfile \
 	out/binutils/index.json \
+	out/brotli/index.json \
 	out/busybox/index.json \
 	out/bzip2/index.json \
 	out/c-ares/index.json \
@@ -2084,6 +2085,7 @@ out/nodejs/index.json: \
 	out/musl/index.json \
 	out/ninja/index.json \
 	out/openssl/index.json \
+	out/pkgconf/index.json \
 	out/python/index.json \
 	out/zlib/index.json
 	$(call build,nodejs)

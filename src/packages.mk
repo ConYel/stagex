@@ -310,6 +310,18 @@ out/bzip2/index.json: \
 	out/musl/index.json
 	$(call build,bzip2)
 
+.PHONY: c-ares
+c-ares: out/c-ares/index.json
+out/c-ares/index.json: \
+	packages/c-ares/Containerfile \
+	out/binutils/index.json \
+	out/busybox/index.json \
+	out/filesystem/index.json \
+	out/gcc/index.json \
+	out/make/index.json \
+	out/musl/index.json
+	$(call build,c-ares)
+
 .PHONY: ca-certificates
 ca-certificates: out/ca-certificates/index.json
 out/ca-certificates/index.json: \
@@ -1336,6 +1348,23 @@ out/libedit/index.json: \
 	out/perl/index.json
 	$(call build,libedit)
 
+.PHONY: libev
+libev: out/libev/index.json
+out/libev/index.json: \
+	packages/libev/Containerfile \
+	out/autoconf/index.json \
+	out/automake/index.json \
+	out/binutils/index.json \
+	out/busybox/index.json \
+	out/filesystem/index.json \
+	out/gcc/index.json \
+	out/libtool/index.json \
+	out/m4/index.json \
+	out/make/index.json \
+	out/musl/index.json \
+	out/perl/index.json
+	$(call build,libev)
+
 .PHONY: libevent
 libevent: out/libevent/index.json
 out/libevent/index.json: \
@@ -1434,6 +1463,23 @@ out/libksba/index.json: \
 	out/npth/index.json \
 	out/zlib/index.json
 	$(call build,libksba)
+
+.PHONY: libnghttp2
+libnghttp2: out/libnghttp2/index.json
+out/libnghttp2/index.json: \
+	packages/libnghttp2/Containerfile \
+	out/binutils/index.json \
+	out/busybox/index.json \
+	out/c-ares/index.json \
+	out/filesystem/index.json \
+	out/gcc/index.json \
+	out/libev/index.json \
+	out/make/index.json \
+	out/musl/index.json \
+	out/openssl/index.json \
+	out/pkgconf/index.json \
+	out/zlib/index.json
+	$(call build,libnghttp2)
 
 .PHONY: libqrencode
 libqrencode: out/libqrencode/index.json
@@ -2028,8 +2074,11 @@ out/nodejs/index.json: \
 	out/binutils/index.json \
 	out/busybox/index.json \
 	out/bzip2/index.json \
+	out/c-ares/index.json \
 	out/filesystem/index.json \
 	out/gcc/index.json \
+	out/icu/index.json \
+	out/libnghttp2/index.json \
 	out/linux-headers/index.json \
 	out/make/index.json \
 	out/musl/index.json \
@@ -3476,6 +3525,7 @@ out/python/index.json: \
 	out/libffi/index.json \
 	out/make/index.json \
 	out/musl/index.json \
+	out/ncurses/index.json \
 	out/openssl/index.json \
 	out/sqlite3/index.json \
 	out/zlib/index.json

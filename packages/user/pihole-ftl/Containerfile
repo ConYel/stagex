@@ -29,6 +29,7 @@ EOF
 
 FROM stagex/pallet-gcc-cmake-busybox AS build
 ARG VERSION
+ENV SOURCE_DATE_EPOCH=1
 COPY --from=stagex/core-gmp . /
 COPY --from=stagex/user-nettle . /
 COPY --from=build-libunistring /rootfs/ /
@@ -37,7 +38,8 @@ COPY --from=build-xxd /usr/bin/xxd /usr/bin/xxd
 ADD fetch/v${VERSION}.tar.gz .
 WORKDIR /FTL-${VERSION}
 RUN --network=none <<-EOF
-	GIT_VERSION=v${VERSION} STATIC=true cmake \
+	export GIT_VERSION=v${VERSION} GIT_TAG=v${VERSION} STATIC=true
+	cmake \
 	  -G Ninja \
 	  -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja \
 	  -DCMAKE_BUILD_TYPE=Release \

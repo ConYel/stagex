@@ -1,0 +1,54 @@
+FROM stagex/pallet-gcc-gnu-busybox AS build-libunistring
+ARG LIBUNISTRING_VERSION
+ADD fetch/libunistring-${LIBUNISTRING_VERSION}.tar.gz .
+WORKDIR /libunistring-${LIBUNISTRING_VERSION}
+RUN --network=none <<-EOF
+	./configure --prefix=/rootfs/usr --disable-shared --enable-static
+	make -j$(nproc)
+	make install
+EOF
+
+FROM stagex/pallet-gcc-gnu-busybox AS build-libidn2
+ARG LIBIDN2_VERSION
+COPY --from=build-libunistring /rootfs/ /
+ADD fetch/libidn2-${LIBIDN2_VERSION}.tar.gz .
+WORKDIR /libidn2-${LIBIDN2_VERSION}
+RUN --network=none <<-EOF
+	./configure --prefix=/rootfs/usr --disable-shared --enable-static
+	make -j$(nproc)
+	make install
+EOF
+
+FROM stagex/pallet-gcc-gnu-busybox AS build-xxd
+ARG XXD_VERSION
+ADD fetch/xxd-v${XXD_VERSION}.c .
+RUN --network=none <<-EOF
+	gcc -DUNIX -O2 -o /usr/bin/xxd xxd-v${XXD_VERSION}.c
+	strip /usr/bin/xxd
+EOF
+
+FROM stagex/pallet-gcc-cmake-busybox AS build
+ARG VERSION
+COPY --from=stagex/core-gmp . /
+COPY --from=stagex/user-nettle . /
+COPY --from=build-libunistring /rootfs/ /
+COPY --from=build-libidn2 /rootfs/ /
+COPY --from=build-xxd /usr/bin/xxd /usr/bin/xxd
+ADD fetch/v${VERSION}.tar.gz .
+WORKDIR /FTL-${VERSION}
+RUN --network=none <<-EOF
+	GIT_VERSION=v${VERSION} STATIC=true cmake \
+	  -G Ninja \
+	  -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja \
+	  -DCMAKE_BUILD_TYPE=Release \
+	  -DUSE_READLINE=OFF \
+	  -DUSE_MBED_TLS=OFF \
+	  -S . -B build
+	cmake --build build -j$(nproc)
+	mkdir -p /rootfs/usr/bin /rootfs/usr/share/licenses/pihole-ftl
+	cp build/pihole-FTL /rootfs/usr/bin/
+	cp LICENSE /rootfs/usr/share/licenses/pihole-ftl/
+EOF
+
+FROM stagex/core-filesystem AS package
+COPY --from=build /rootfs/ /

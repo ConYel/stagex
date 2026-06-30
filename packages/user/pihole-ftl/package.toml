@@ -1,0 +1,33 @@
+[package]
+name = "pihole-ftl"
+version = "6.6.2"
+description = "Pi-hole FTL - The engine behind Pi-hole's DNS statistics and ad-blocking"
+license = "AGPL-3.0-only"
+website = "https://github.com/pi-hole/FTL"
+
+[sources.pihole-ftl]
+hash = "5827e6bfd7ff4a8ed8cd1e475f9bee66061533375ea5061ba1946c73992de082"
+format = "tar.gz"
+file = "v{version}.{format}"
+mirrors = ["https://github.com/pi-hole/FTL/archive/refs/tags/{file}"]
+
+[sources.libunistring]
+hash = "f7e39ddeca18858ecdd02c60d1d5374fcdcbbcdb6b68a391f8497cb1cb2cf3f7"
+format = "tar.gz"
+version = "1.4"
+file = "libunistring-{version}.{format}"
+mirrors = ["https://ftp.gnu.org/gnu/libunistring/{file}"]
+
+[sources.libidn2]
+hash = "f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a"
+format = "tar.gz"
+version = "2.3.8"
+file = "libidn2-{version}.{format}"
+mirrors = ["https://ftp.gnu.org/gnu/libidn/{file}"]
+
+[sources.xxd]
+hash = "081c52b38668bb1f68afbb9fef4d73eec88fc12f6ac0f8bef5abf4332d8a61d0"
+format = "c"
+version = "9.1.0"
+file = "xxd-v{version}.{format}"
+mirrors = ["https://raw.githubusercontent.com/vim/vim/b4ddc6c11e95cef4b372e239871fae1c8d4f72b6/src/xxd/xxd.c"]

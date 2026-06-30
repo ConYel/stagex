@@ -1,0 +1,24 @@
+FROM stagex/pallet-go AS build
+ARG VERSION
+ENV SOURCE_DATE_EPOCH=1
+ADD fetch/v${VERSION}.tar.gz .
+ENV GOPATH=/cache/go
+ENV GOCACHE=/cache/
+ENV GOWORK=off
+ENV GOPROXY=https://proxy.golang.org,direct
+ENV GOSUMDB=sum.golang.org
+ENV CGO_ENABLED=0
+ENV GOHOSTOS=linux
+ENV GOHOSTARCH=amd64
+WORKDIR /AdGuardHome-${VERSION}
+RUN mkdir -p build && go mod download
+RUN --network=none <<-EOF
+	go build -trimpath \
+	  -ldflags "-s -w -X github.com/AdguardTeam/AdGuardHome/internal/version.version=v${VERSION}" \
+	  -o /rootfs/usr/bin/AdGuardHome .
+	mkdir -p /rootfs/usr/share/licenses/adguard-home
+	cp LICENSE.txt /rootfs/usr/share/licenses/adguard-home/
+EOF
+
+FROM stagex/core-filesystem AS package
+COPY --from=build /rootfs/ /

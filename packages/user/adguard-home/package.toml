@@ -1,0 +1,12 @@
+[package]
+name = "adguard-home"
+version = "0.107.77"
+description = "Network-wide ads and trackers blocking DNS server"
+license = "GPL-3.0-only"
+website = "https://adguard.com/adguard-home.html"
+
+[sources.adguard-home]
+hash = "1db8e53238c3ba8aecfbe0b68ba6197435dae19fd3512c70c68d90b7239b7464"
+format = "tar.gz"
+file = "v{version}.{format}"
+mirrors = ["https://github.com/AdguardTeam/AdGuardHome/archive/refs/tags/{file}"]

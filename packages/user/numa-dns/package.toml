@@ -1,0 +1,12 @@
+[package]
+name = "numa-dns"
+version = "0.21.0"
+description = "Portable DNS resolver in Rust with ad blocking, developer overrides, and DNS-over-HTTPS"
+license = "MIT"
+website = "https://github.com/razvandimescu/numa"
+
+[sources.numa-dns]
+hash = "3eedd3cc3fa8642d636ecc3c0faeca9686d87392c20984b71e8b7c7e7ef23a6b"
+format = "tar.gz"
+file = "v{version}.{format}"
+mirrors = ["https://github.com/razvandimescu/numa/archive/refs/tags/{file}"]

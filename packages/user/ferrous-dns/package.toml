@@ -1,0 +1,12 @@
+[package]
+name = "ferrous-dns"
+version = "0.8.8"
+description = "High-performance DNS server with ad-blocking written in Rust"
+license = "MIT"
+website = "https://github.com/ferrous-networking/ferrous-dns"
+
+[sources.ferrous-dns]
+hash = "acf9153ba67a5cd95a2d03e641ba879a0fed3deee7816aca0b87893b4e615770"
+format = "tar.gz"
+file = "v{version}.{format}"
+mirrors = ["https://github.com/ferrous-networking/ferrous-dns/archive/refs/tags/{file}"]

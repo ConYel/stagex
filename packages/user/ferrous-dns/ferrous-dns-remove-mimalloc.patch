@@ -1,0 +1,50 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 7c051a4..a6142f8 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -77,7 +77,6 @@ h3 = "0.0.8"
+ h3-quinn = "0.0.10"
+ http = "1"
+ bytes = "1"
+-mimalloc = { version = "0.1", default-features = false }
+ core_affinity = "0.8"
+ libc = "0.2.183"
+
+diff --git a/crates/cli/Cargo.toml b/crates/cli/Cargo.toml
+index 5d83eac..589a7d4 100644
+--- a/crates/cli/Cargo.toml
++++ b/crates/cli/Cargo.toml
+@@ -39,7 +39,6 @@ clap.workspace = true
+ sqlx.workspace = true
+ hickory-server.workspace = true
+ socket2.workspace = true
+-mimalloc.workspace = true
+ core_affinity.workspace = true
+ libc.workspace = true
+ dashmap.workspace = true
+diff --git a/crates/cli/src/args.rs b/crates/cli/src/args.rs
+index b099cc0..e6f5877 100644
+--- a/crates/cli/src/args.rs
++++ b/crates/cli/src/args.rs
+@@ -2,7 +2,7 @@ use clap::Parser;
+
+ #[derive(Parser)]
+ #[command(name = "ferrous-dns")]
+-#[command(version = "0.1.0")]
++#[command(version = "0.8.8")]
+ #[command(about = "Ferrous DNS - High-performance DNS server with ad-blocking")]
+ pub struct Cli {
+     #[arg(short = 'c', long, value_name = "FILE")]
+diff --git a/crates/cli/src/main.rs b/crates/cli/src/main.rs
+index c9d8f5f..5829c30 100644
+--- a/crates/cli/src/main.rs
++++ b/crates/cli/src/main.rs
+@@ -1,8 +1,3 @@
+-use mimalloc::MiMalloc;
+-
+-#[global_allocator]
+-static GLOBAL: MiMalloc = MiMalloc;
+-
+ use anyhow::Context;
+ use clap::Parser;
+ use ferrous_dns_domain::CliOverrides;

@@ -16,8 +16,7 @@ RUN --network=none <<-EOF
 	go build -trimpath \
 	  -ldflags "-s -w -X github.com/0xERR0R/blocky/util.Version=v${VERSION}" \
 	  -o /rootfs/usr/bin/blocky .
-	mkdir -p /rootfs/usr/share/licenses/blocky
-	cp LICENSE /rootfs/usr/share/licenses/blocky/
+	install -vDm644 -t /rootfs/usr/share/licenses/blocky LICENSE
 EOF
 
 FROM stagex/core-filesystem AS package

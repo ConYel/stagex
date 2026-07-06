@@ -13,9 +13,8 @@ RUN --network=none <<-EOF
 	  --release \
 	  --target "${ARCH}-unknown-linux-musl" \
 	  --bin numa
-	mkdir -p /rootfs/usr/bin /rootfs/usr/share/licenses/numa-dns
-	cp target/${ARCH}-unknown-linux-musl/release/numa /rootfs/usr/bin/
-	cp LICENSE /rootfs/usr/share/licenses/numa-dns/
+	install -vDm755 -t /rootfs/usr/bin target/${ARCH}-unknown-linux-musl/release/numa
+	install -vDm644 -t /rootfs/usr/share/licenses/numa-dns LICENSE
 EOF
 
 FROM stagex/core-filesystem AS package

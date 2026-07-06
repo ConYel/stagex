@@ -17,9 +17,8 @@ RUN --network=none <<-EOF
 	  --release \
 	  --target "${ARCH}-unknown-linux-musl" \
 	  --bin ferrous-dns
-	mkdir -p /rootfs/usr/bin /rootfs/usr/share/licenses/ferrous-dns
-	cp target/${ARCH}-unknown-linux-musl/release/ferrous-dns /rootfs/usr/bin/
-	cp LICENSE-MIT /rootfs/usr/share/licenses/ferrous-dns/
+	install -vDm755 -t /rootfs/usr/bin target/${ARCH}-unknown-linux-musl/release/ferrous-dns
+	install -vDm644 -t /rootfs/usr/share/licenses/ferrous-dns LICENSE-MIT
 EOF
 
 FROM stagex/core-filesystem AS package

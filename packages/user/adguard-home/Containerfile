@@ -11,13 +11,12 @@ ENV CGO_ENABLED=0
 ENV GOHOSTOS=linux
 ENV GOHOSTARCH=amd64
 WORKDIR /AdGuardHome-${VERSION}
-RUN mkdir -p build && go mod download
+RUN go mod download
 RUN --network=none <<-EOF
 	go build -trimpath \
 	  -ldflags "-s -w -X github.com/AdguardTeam/AdGuardHome/internal/version.version=v${VERSION}" \
 	  -o /rootfs/usr/bin/AdGuardHome .
-	mkdir -p /rootfs/usr/share/licenses/adguard-home
-	cp LICENSE.txt /rootfs/usr/share/licenses/adguard-home/
+	install -vDm644 -t /rootfs/usr/share/licenses/adguard-home LICENSE.txt
 EOF
 
 FROM stagex/core-filesystem AS package
